@@ -160,7 +160,7 @@ async def require_admin(current_user: dict = Depends(get_current_user)):
 # Initialize admin user
 @app.on_event("startup")
 async def startup_event():
-    admin_email = "Nihaan.mohammed@dhwaniris.com"
+    admin_email = "nihaan.mohammed@dhwaniris.com"
     existing_admin = await db.users.find_one({"email": admin_email}, {"_id": 0})
     
     if not existing_admin:
@@ -178,13 +178,14 @@ async def startup_event():
 # Auth routes
 @api_router.post("/auth/register", response_model=UserResponse)
 async def register(user: UserCreate):
-    existing = await db.users.find_one({"email": user.email}, {"_id": 0})
+    email_lower = user.email.lower()
+    existing = await db.users.find_one({"email": email_lower}, {"_id": 0})
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
     
     user_doc = {
         "id": str(uuid.uuid4()),
-        "email": user.email,
+        "email": email_lower,
         "password_hash": hash_password(user.password),
         "name": user.name,
         "role": "author",
@@ -202,7 +203,8 @@ async def register(user: UserCreate):
 
 @api_router.post("/auth/login", response_model=TokenResponse)
 async def login(credentials: UserLogin):
-    user = await db.users.find_one({"email": credentials.email}, {"_id": 0})
+    email_lower = credentials.email.lower()
+    user = await db.users.find_one({"email": email_lower}, {"_id": 0})
     if not user or not verify_password(credentials.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid email or password")
     
@@ -229,6 +231,47 @@ async def get_me(current_user: dict = Depends(get_current_user)):
         role=current_user["role"],
         created_at=current_user["created_at"]
     )
+
+# User management routes (Admin only)
+@api_router.get("/users", response_model=List[UserResponse])
+async def get_users(admin: dict = Depends(require_admin)):
+    users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(1000)
+    return [UserResponse(**user) for user in users]
+
+@api_router.post("/users", response_model=UserResponse)
+async def create_user(user: UserCreate, admin: dict = Depends(require_admin)):
+    email_lower = user.email.lower()
+    existing = await db.users.find_one({"email": email_lower}, {"_id": 0})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    user_doc = {
+        "id": str(uuid.uuid4()),
+        "email": email_lower,
+        "password_hash": hash_password(user.password),
+        "name": user.name,
+        "role": user.role if user.role in ["admin", "author"] else "author",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.users.insert_one(user_doc)
+    return UserResponse(
+        id=user_doc["id"],
+        email=user_doc["email"],
+        name=user_doc["name"],
+        role=user_doc["role"],
+        created_at=user_doc["created_at"]
+    )
+
+@api_router.delete("/users/{user_id}")
+async def delete_user(user_id: str, admin: dict = Depends(require_admin)):
+    if user_id == admin["id"]:
+        raise HTTPException(status_code=400, detail="Cannot delete your own account")
+    
+    result = await db.users.delete_one({"id": user_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"message": "User deleted successfully"}
 
 # Category routes (Admin only)
 @api_router.post("/categories", response_model=CategoryResponse)
