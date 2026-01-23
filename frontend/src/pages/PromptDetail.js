@@ -110,9 +110,9 @@ const PromptDetail = () => {
       <Navbar isPublic />
 
       <div className="container py-12">
-        <Link to="/" className="inline-flex items-center gap-2 text-[#811622] hover:underline mb-6" data-testid="back-link">
+        <Link to="/" className="inline-flex items-center gap-2 text-[#811622] hover:underline mb-6 font-semibold" data-testid="back-link">
           <ArrowLeft size={20} />
-          Back to Library
+          Back to Prompti Vault
         </Link>
 
         <Card className="p-8 mb-8" data-testid="prompti-detail">
