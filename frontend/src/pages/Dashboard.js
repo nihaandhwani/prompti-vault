@@ -3,7 +3,7 @@ import { useAuth } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { FolderOpen, Tags, FileText, Settings, Users } from 'lucide-react';
+import { FolderOpen, Tags, FileText, Settings as SettingsIcon, Users } from 'lucide-react';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -56,12 +56,20 @@ const Dashboard = () => {
                   <p className="text-[#53435B]">Manage authors and admins</p>
                 </Card>
               </Link>
+
+              <Link to="/admin/settings" data-testid="settings-link">
+                <Card className="p-8 hover:shadow-xl transition-all cursor-pointer group">
+                  <SettingsIcon className="text-[#F58634] mb-4 group-hover:scale-110 transition-transform" size={40} />
+                  <h3 className="text-xl font-bold text-[#811622] mb-2" style={{ fontFamily: 'Manrope' }}>Settings</h3>
+                  <p className="text-[#53435B]">Configure branding and links</p>
+                </Card>
+              </Link>
             </>
           )}
 
           <Link to="/" data-testid="public-library-link">
             <Card className="p-8 hover:shadow-xl transition-all cursor-pointer group bg-[#f7e2d1]">
-              <Settings className="text-[#811622] mb-4 group-hover:scale-110 transition-transform" size={40} />
+              <SettingsIcon className="text-[#811622] mb-4 group-hover:scale-110 transition-transform" size={40} />
               <h3 className="text-xl font-bold text-[#811622] mb-2" style={{ fontFamily: 'Manrope' }}>Prompti Vault</h3>
               <p className="text-[#53435B]">View public library</p>
             </Card>
