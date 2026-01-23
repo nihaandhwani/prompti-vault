@@ -264,7 +264,7 @@ async def get_me(current_user: dict = Depends(get_current_user)):
 # User management routes (Admin only)
 @api_router.get("/users", response_model=List[UserResponse])
 async def get_users(admin: dict = Depends(require_admin)):
-    users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(1000)
+    users = await db.users.find({}, {"_id": 0, "password_hash": 0}).limit(100).to_list(100)
     return [UserResponse(**user) for user in users]
 
 @api_router.post("/users", response_model=UserResponse)
@@ -317,7 +317,7 @@ async def create_category(category: CategoryCreate, admin: dict = Depends(requir
 
 @api_router.get("/categories", response_model=List[CategoryResponse])
 async def get_categories():
-    categories = await db.categories.find({}, {"_id": 0}).to_list(1000)
+    categories = await db.categories.find({}, {"_id": 0}).limit(100).to_list(100)
     return [CategoryResponse(**cat) for cat in categories]
 
 @api_router.put("/categories/{category_id}", response_model=CategoryResponse)
@@ -353,7 +353,7 @@ async def create_tag(tag: TagCreate, admin: dict = Depends(require_admin)):
 
 @api_router.get("/tags", response_model=List[TagResponse])
 async def get_tags():
-    tags = await db.tags.find({}, {"_id": 0}).to_list(1000)
+    tags = await db.tags.find({}, {"_id": 0}).limit(100).to_list(100)
     return [TagResponse(**tag) for tag in tags]
 
 @api_router.put("/tags/{tag_id}", response_model=TagResponse)
@@ -611,7 +611,7 @@ async def rate_prompti(prompti_id: str, rating: RatingCreate):
 
 @api_router.get("/public/prompti/{prompti_id}/ratings", response_model=List[RatingResponse])
 async def get_prompti_ratings(prompti_id: str):
-    ratings = await db.ratings.find({"prompti_id": prompti_id}, {"_id": 0}).to_list(1000)
+    ratings = await db.ratings.find({"prompti_id": prompti_id}, {"_id": 0}).limit(100).to_list(100)
     return [RatingResponse(**r) for r in ratings]
 
 # Settings routes
