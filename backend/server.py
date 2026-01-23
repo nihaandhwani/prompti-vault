@@ -124,6 +124,21 @@ class RatingResponse(BaseModel):
     user_email: str
     created_at: str
 
+class SettingsUpdate(BaseModel):
+    logo_url: Optional[str] = None
+    company_name: Optional[str] = None
+    company_website: Optional[str] = None
+    contact_email: Optional[str] = None
+
+class SettingsResponse(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    logo_url: str
+    company_name: str
+    company_website: str
+    contact_email: str
+    updated_at: str
+
 # Helper functions
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -157,7 +172,7 @@ async def require_admin(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Admin access required")
     return current_user
 
-# Initialize admin user
+# Initialize admin user and default settings
 @app.on_event("startup")
 async def startup_event():
     admin_email = "nihaan.mohammed@dhwaniris.com"
@@ -174,6 +189,20 @@ async def startup_event():
         }
         await db.users.insert_one(admin_user)
         logger.info(f"Admin user created: {admin_email}")
+    
+    # Initialize default settings
+    existing_settings = await db.settings.find_one({"id": "app_settings"}, {"_id": 0})
+    if not existing_settings:
+        default_settings = {
+            "id": "app_settings",
+            "logo_url": "https://customer-assets.emergentagent.com/job_prompt-forge-125/artifacts/b9zqkf94_Dhwani%20RIS%20Logo.jfif",
+            "company_name": "Dhwani RIS",
+            "company_website": "https://dhwaniris.com",
+            "contact_email": "partnerships@dhwaniris.com",
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.settings.insert_one(default_settings)
+        logger.info("Default settings created")
 
 # Auth routes
 @api_router.post("/auth/register", response_model=UserResponse)
@@ -533,6 +562,31 @@ async def rate_prompti(prompti_id: str, rating: RatingCreate):
 async def get_prompti_ratings(prompti_id: str):
     ratings = await db.ratings.find({"prompti_id": prompti_id}, {"_id": 0}).to_list(1000)
     return [RatingResponse(**r) for r in ratings]
+
+# Settings routes
+@api_router.get("/settings", response_model=SettingsResponse)
+async def get_settings():
+    settings = await db.settings.find_one({"id": "app_settings"}, {"_id": 0})
+    if not settings:
+        raise HTTPException(status_code=404, detail="Settings not found")
+    return SettingsResponse(**settings)
+
+@api_router.put("/settings", response_model=SettingsResponse)
+async def update_settings(settings_update: SettingsUpdate, admin: dict = Depends(require_admin)):
+    update_data = {k: v for k, v in settings_update.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.settings.find_one_and_update(
+        {"id": "app_settings"},
+        {"$set": update_data},
+        return_document=True,
+        projection={"_id": 0}
+    )
+    
+    if not result:
+        raise HTTPException(status_code=404, detail="Settings not found")
+    
+    return SettingsResponse(**result)
 
 app.include_router(api_router)
 
