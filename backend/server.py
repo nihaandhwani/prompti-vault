@@ -403,15 +403,39 @@ async def create_prompti(prompt: PromptCreate, current_user: dict = Depends(get_
 
 @api_router.get("/prompti", response_model=List[PromptResponse])
 async def get_my_prompti(current_user: dict = Depends(get_current_user)):
-    prompti = await db.prompti.find({"author_id": current_user["id"]}, {"_id": 0}).to_list(1000)
+    prompti = await db.prompti.find({"author_id": current_user["id"]}, {"_id": 0}).limit(100).to_list(100)
+    
+    if not prompti:
+        return []
+    
+    # Batch fetch all related data
+    category_ids = list(set(p["category_id"] for p in prompti))
+    tag_ids = list(set(tag_id for p in prompti for tag_id in p.get("tag_ids", [])))
+    
+    categories_list = await db.categories.find({"id": {"$in": category_ids}}, {"_id": 0}).to_list(len(category_ids))
+    tags_list = await db.tags.find({"id": {"$in": tag_ids}}, {"_id": 0}).to_list(len(tag_ids)) if tag_ids else []
+    
+    # Create lookup maps
+    categories_map = {c["id"]: c for c in categories_list}
+    tags_map = {t["id"]: t for t in tags_list}
+    
+    # Fetch all ratings at once
+    prompti_ids = [p["id"] for p in prompti]
+    all_ratings = await db.ratings.find({"prompti_id": {"$in": prompti_ids}}, {"_id": 0}).to_list(10000)
+    ratings_by_prompti = {}
+    for rating in all_ratings:
+        pid = rating["prompti_id"]
+        if pid not in ratings_by_prompti:
+            ratings_by_prompti[pid] = []
+        ratings_by_prompti[pid].append(rating)
     
     result = []
     for p in prompti:
-        category = await db.categories.find_one({"id": p["category_id"]}, {"_id": 0})
-        tags = await db.tags.find({"id": {"$in": p["tag_ids"]}}, {"_id": 0}).to_list(100)
+        category = categories_map.get(p["category_id"])
+        tags = [tags_map[tid] for tid in p.get("tag_ids", []) if tid in tags_map]
         
-        ratings = await db.ratings.find({"prompti_id": p["id"]}, {"_id": 0}).to_list(1000)
-        avg_rating = sum(r["rating"] for r in ratings) / len(ratings) if ratings else 0.0
+        prompti_ratings = ratings_by_prompti.get(p["id"], [])
+        avg_rating = sum(r["rating"] for r in prompti_ratings) / len(prompti_ratings) if prompti_ratings else 0.0
         
         result.append(PromptResponse(
             **p,
@@ -419,7 +443,7 @@ async def get_my_prompti(current_user: dict = Depends(get_current_user)):
             tag_names=[tag["name"] for tag in tags],
             author_name=current_user["name"],
             average_rating=round(avg_rating, 1),
-            rating_count=len(ratings)
+            rating_count=len(prompti_ratings)
         ))
     
     return result
