@@ -1,34 +1,168 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #FAFAFA;
+  color: #1a1a1a;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Manrope', sans-serif;
 }
 
-.App-link {
-    color: #61dafb;
+.App {
+  min-height: 100vh;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.brand-primary {
+  color: #811622;
+}
+
+.brand-secondary {
+  color: #F58634;
+}
+
+.bg-brand-primary {
+  background-color: #811622;
+}
+
+.bg-brand-secondary {
+  background-color: #F58634;
+}
+
+.bg-cream {
+  background-color: #f7e2d1;
+}
+
+.text-muted {
+  color: #53435B;
+}
+
+.btn-primary {
+  background-color: #811622;
+  color: white;
+  padding: 12px 32px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #6b1219;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(129, 22, 34, 0.3);
+}
+
+.btn-secondary {
+  background-color: #F58634;
+  color: white;
+  padding: 12px 32px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #d97529;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(245, 134, 52, 0.3);
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.star-rating {
+  display: flex;
+  gap: 4px;
+  font-size: 20px;
+}
+
+.star {
+  cursor: pointer;
+  color: #ddd;
+  transition: color 0.2s ease;
+}
+
+.star.filled {
+  color: #F58634;
+}
+
+.star:hover {
+  color: #F58634;
+}
+
+.tag-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background-color: #f7e2d1;
+  color: #811622;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 4px;
+  transition: all 0.2s ease;
+}
+
+.tag-badge:hover {
+  background-color: #F58634;
+  color: white;
+  transform: scale(1.05);
+}
+
+.page-header {
+  padding: 48px 0;
+  background: linear-gradient(135deg, rgba(129, 22, 34, 0.05) 0%, rgba(245, 134, 52, 0.05) 100%);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.navbar {
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #811622;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 40px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
