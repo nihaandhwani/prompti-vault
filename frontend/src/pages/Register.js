@@ -35,8 +35,13 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(129, 22, 34, 0.05) 0%, rgba(245, 134, 52, 0.05) 100%)' }}>
       <Card className="w-full max-w-md p-8 shadow-xl" data-testid="register-card">
         <div className="flex flex-col items-center mb-8">
-          <BookOpen className="text-[#811622] mb-4" size={48} />
-          <h1 className="text-3xl font-bold text-[#811622]" style={{ fontFamily: 'Manrope' }}>Prompt Forge</h1>
+          <img 
+            src="https://customer-assets.emergentagent.com/job_prompt-forge-125/artifacts/b9zqkf94_Dhwani%20RIS%20Logo.jfif" 
+            alt="Dhwani RIS" 
+            className="h-16 w-16 object-contain mb-3"
+          />
+          <h1 className="text-3xl font-bold text-[#811622]" style={{ fontFamily: 'Manrope' }}>Prompti Vault</h1>
+          <p className="text-sm text-[#53435B] mt-1">by Dhwani RIS</p>
           <p className="text-[#53435B] mt-2">Create your account</p>
         </div>
 

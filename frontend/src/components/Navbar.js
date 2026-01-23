@@ -16,10 +16,14 @@ const Navbar = ({ isPublic = false }) => {
     <nav className="navbar">
       <div className="container">
         <div className="flex items-center justify-between">
-          <Link to={isPublic ? "/" : "/dashboard"} className="flex items-center gap-2" data-testid="logo-link">
-            <BookOpen className="text-[#811622]" size={32} />
+          <Link to={isPublic ? "/" : "/dashboard"} className="flex items-center gap-3" data-testid="logo-link">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_prompt-forge-125/artifacts/b9zqkf94_Dhwani%20RIS%20Logo.jfif" 
+              alt="Dhwani RIS" 
+              className="h-10 w-10 object-contain"
+            />
             <h1 className="text-2xl font-bold" style={{ color: '#811622', fontFamily: 'Manrope' }}>
-              Prompt Forge
+              Prompti Vault
             </h1>
           </Link>
 

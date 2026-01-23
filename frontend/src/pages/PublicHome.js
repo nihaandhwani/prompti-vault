@@ -63,9 +63,19 @@ const PublicHome = () => {
 
       <div className="page-header">
         <div className="container">
-          <h1 className="text-5xl font-bold text-[#811622] mb-4" style={{ fontFamily: 'Manrope' }} data-testid="public-home-title">
-            Prompt Library
-          </h1>
+          <div className="flex items-center gap-4 mb-4">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_prompt-forge-125/artifacts/b9zqkf94_Dhwani%20RIS%20Logo.jfif" 
+              alt="Dhwani RIS" 
+              className="h-16 w-16 object-contain"
+            />
+            <div>
+              <h1 className="text-5xl font-bold text-[#811622]" style={{ fontFamily: 'Manrope' }} data-testid="public-home-title">
+                Prompti Vault
+              </h1>
+              <p className="text-sm text-[#53435B] mt-1">by Dhwani RIS</p>
+            </div>
+          </div>
           <p className="text-xl text-[#53435B] mb-8">Discover and explore curated prompts for AI models</p>
 
           <form onSubmit={handleSearch} className="max-w-2xl">
