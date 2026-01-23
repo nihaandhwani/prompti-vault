@@ -48,6 +48,14 @@ const Dashboard = () => {
                   <p className="text-[#53435B]">Manage prompt tags</p>
                 </Card>
               </Link>
+
+              <Link to="/admin/users" data-testid="users-link">
+                <Card className="p-8 hover:shadow-xl transition-all cursor-pointer group">
+                  <Users className="text-[#F58634] mb-4 group-hover:scale-110 transition-transform" size={40} />
+                  <h3 className="text-xl font-bold text-[#811622] mb-2" style={{ fontFamily: 'Manrope' }}>Users</h3>
+                  <p className="text-[#53435B]">Manage authors and admins</p>
+                </Card>
+              </Link>
             </>
           )}
 
