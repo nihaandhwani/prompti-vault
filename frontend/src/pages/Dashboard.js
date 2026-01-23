@@ -62,8 +62,8 @@ const Dashboard = () => {
           <Link to="/" data-testid="public-library-link">
             <Card className="p-8 hover:shadow-xl transition-all cursor-pointer group bg-[#f7e2d1]">
               <Settings className="text-[#811622] mb-4 group-hover:scale-110 transition-transform" size={40} />
-              <h3 className="text-xl font-bold text-[#811622] mb-2" style={{ fontFamily: 'Manrope' }}>Public Library</h3>
-              <p className="text-[#53435B]">View published prompts</p>
+              <h3 className="text-xl font-bold text-[#811622] mb-2" style={{ fontFamily: 'Manrope' }}>Prompti Vault</h3>
+              <p className="text-[#53435B]">View public library</p>
             </Card>
           </Link>
         </div>
