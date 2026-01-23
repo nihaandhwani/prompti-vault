@@ -1,10 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useSettings } from '@/context/SettingsContext';
 import { Button } from '@/components/ui/button';
-import { LogOut, BookOpen, User } from 'lucide-react';
+import { LogOut, User } from 'lucide-react';
 
 const Navbar = ({ isPublic = false }) => {
   const { user, logout } = useAuth();
+  const { settings } = useSettings();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -18,8 +20,8 @@ const Navbar = ({ isPublic = false }) => {
         <div className="flex items-center justify-between">
           <Link to={isPublic ? "/" : "/dashboard"} className="flex items-center gap-3" data-testid="logo-link">
             <img 
-              src="https://customer-assets.emergentagent.com/job_prompt-forge-125/artifacts/b9zqkf94_Dhwani%20RIS%20Logo.jfif" 
-              alt="Dhwani RIS" 
+              src={settings.logo_url} 
+              alt={settings.company_name} 
               className="h-10 w-10 object-contain"
             />
             <h1 className="text-2xl font-bold" style={{ color: '#811622', fontFamily: 'Manrope' }}>
