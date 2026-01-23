@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useSettings } from '@/context/SettingsContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { BookOpen } from 'lucide-react';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +14,7 @@ const Register = () => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
+  const { settings } = useSettings();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -36,12 +37,12 @@ const Register = () => {
       <Card className="w-full max-w-md p-8 shadow-xl" data-testid="register-card">
         <div className="flex flex-col items-center mb-8">
           <img 
-            src="https://customer-assets.emergentagent.com/job_prompt-forge-125/artifacts/b9zqkf94_Dhwani%20RIS%20Logo.jfif" 
-            alt="Dhwani RIS" 
+            src={settings.logo_url} 
+            alt={settings.company_name} 
             className="h-16 w-16 object-contain mb-3"
           />
           <h1 className="text-3xl font-bold text-[#811622]" style={{ fontFamily: 'Manrope' }}>Prompti Vault</h1>
-          <p className="text-sm text-[#53435B] mt-1">by Dhwani RIS</p>
+          <p className="text-sm text-[#53435B] mt-1">by {settings.company_name}</p>
           <p className="text-[#53435B] mt-2">Create your account</p>
         </div>
 

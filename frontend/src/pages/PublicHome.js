@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { useSettings } from '@/context/SettingsContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -18,6 +19,7 @@ const PublicHome = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const { settings } = useSettings();
 
   useEffect(() => {
     fetchCategories();
@@ -66,15 +68,15 @@ const PublicHome = () => {
         <div className="container">
           <div className="flex items-center gap-4 mb-4">
             <img 
-              src="https://customer-assets.emergentagent.com/job_prompt-forge-125/artifacts/b9zqkf94_Dhwani%20RIS%20Logo.jfif" 
-              alt="Dhwani RIS" 
+              src={settings.logo_url} 
+              alt={settings.company_name} 
               className="h-16 w-16 object-contain"
             />
             <div>
               <h1 className="text-5xl font-bold text-[#811622]" style={{ fontFamily: 'Manrope' }} data-testid="public-home-title">
                 Prompti Vault
               </h1>
-              <p className="text-sm text-[#53435B] mt-1">by Dhwani RIS</p>
+              <p className="text-sm text-[#53435B] mt-1">by {settings.company_name}</p>
             </div>
           </div>
           <p className="text-xl text-[#53435B] mb-8">Discover and explore curated prompts for AI models</p>
