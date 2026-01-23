@@ -3,7 +3,7 @@ import { useAuth } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { FolderOpen, Tags, FileText, Settings } from 'lucide-react';
+import { FolderOpen, Tags, FileText, Settings, Users } from 'lucide-react';
 
 const Dashboard = () => {
   const { user } = useAuth();

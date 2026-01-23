@@ -6,6 +6,7 @@ import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
 import AdminCategories from "@/pages/AdminCategories";
 import AdminTags from "@/pages/AdminTags";
+import AdminUsers from "@/pages/AdminUsers";
 import AuthorPrompts from "@/pages/AuthorPrompts";
 import CreatePrompt from "@/pages/CreatePrompt";
 import EditPrompt from "@/pages/EditPrompt";
@@ -45,6 +46,14 @@ function App() {
               element={
                 <ProtectedRoute requireAdmin>
                   <AdminTags />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminUsers />
                 </ProtectedRoute>
               }
             />
